@@ -1,0 +1,151 @@
+********银关测试*********
+fingate_settest, fingate_v1, fingate_v2  初始化 FinGate():
+fingate_settest 设置测试环境.setTest():
+fingate_v1 设置测试环境.setServer():
+fingate_v2 设置测试环境 .setServer():
+设置银关账号 .setFingate():
+设置激活和信任额度 .setActiveAmount() 和 .setTrustLimit()
+设置交易流水前缀 .setPrefix() 和 .getPrefix()
+设置通通服务 .setTTongServer()
+	.!.!.! 没有 .setTTongServer() method
+获取资源号 .getNextUUID()
+	fingate_settest:	->WA1462254293116
+	fingate_setserver_v1:	->WB1462254293116
+	fingate_setserver_v2:	->WC1462254293116
+
+*******显示银关*********
+
+... fingate_formal
+	api服务器:		101.200.176.249
+	安全连接:		False
+	api版本:		v2
+	web socket:		ws://101.200.176.249:5002
+	交易前缀		JT
+	激活数量:
+		.!.!.!调用 .getActiveAmount() 错误: 'FinGate' object has no attribute 'currency_value'
+	信任额度		1
+	银关信息:
+		.!.!.!调用 .getServerInfo() 错误: 'FinGate' object has no attribute 'api'
+	服务器状态		True
+	银关账号:
+		.!.!.!调用 .getFinGate() 错误: 'FinGate' object has no attribute 'gateway_address'
+
+
+... fingate_settest
+	api服务器:		101.200.176.249
+	安全连接:		False
+	api版本:		v2
+	web socket:		ws://101.200.176.249:5002
+	交易前缀		WA
+	激活数量		1
+	信任额度		10
+	银关信息:
+		.!.!.!调用 .getServerInfo() 错误: 'FinGate' object has no attribute 'api'
+	服务器状态		True
+	银关账号		('jHb9CJAWyB4jr91VRWn96DkukG4bwdtyTh', 'snoPBjXtMeMyMHUVTgbuqAfg1SUTb')
+
+
+... fingate_setserver_v1
+	api服务器:		tapi.jingtum.com
+	安全连接:		True
+	api版本:		v1
+	web socket:		wss://tapi.jingtum.com:5443
+	交易前缀		WB
+	激活数量		10
+	信任额度		1000
+	银关信息:
+		.!.!.!调用 .getServerInfo() 错误: 'FinGate' object has no attribute 'api'
+	服务器状态		True
+	银关账号		('jHb9CJAWyB4jr91VRWn96DkukG4bwdtyTh', 'snoPBjXtMeMyMHUVTgbuqAfg1SUTb')
+
+
+... fingate_setserver_v2
+	api服务器:		tapi.jingtum.com
+	安全连接:		True
+	api版本:		v2
+	web socket:		wss://tapi.jingtum.com:5443
+	交易前缀		WC
+	激活数量		100
+	信任额度		10000
+	银关信息:
+		.!.!.!调用 .getServerInfo() 错误: 'FinGate' object has no attribute 'api'
+	服务器状态		True
+	银关账号		('jHb9CJAWyB4jr91VRWn96DkukG4bwdtyTh', 'snoPBjXtMeMyMHUVTgbuqAfg1SUTb')
+
+********+钱包测试*********
+创建钱包 .createWallet()
+	......钱包创建成功
+	......钱包创建成功
+	......钱包创建成功
+*****显示三个钱包，对应于前面三个银关*****
+wallet_settest:	jC7dKDFEwTpZRSUMZfZpZCqKBKPjtZtVy	ssagXikmNvx8FCwnCA3gRb3UbSzC7
+wallet_setserver_v1:	jBV7RxrXTHHSaZtfdzrbrAVwZdyJT2sMcM	snCybfUqyQXFCGfvoHqX9ykomgKV4
+wallet_setserver_v2:	jE7wKaMvuxjoBcDJCHr141VktUDLjJFhJY	shanD8GLevAWqcdHHTUHq3eoHoYoc
+
+
+*******激活钱包*************
+	银关 fingate_settest 同步激活 wallet_settest
+	银关 fingate_setserver_v1 同步激活 wallet_setserver_v1
+	银关 fingate_setserver_v2 异步激活 wallet_setserver_v2
+
+fingate_settest 激活 wallet_settest 失败
+fingate_setserver_v1 激活 wallet_setserver_v1 失败
+等候异步激活完成
+	... .getTransaction('WC1462254336776')
+{u'success': True,
+ u'transaction': {u'amount': {u'currency': u'SWT',
+                              u'issuer': u'',
+                              u'value': u'100'},
+                  u'client_resource_id': u'WC1462254336776',
+                  u'counterparty': u'jHb9CJAWyB4jr91VRWn96DkukG4bwdtyTh',
+                  u'date': 1462254350,
+                  u'effects': [],
+                  u'fee': u'0.000012',
+                  u'hash': u'B4A5CCF9A850ACACDFE44A9EE206B3CE3A584CBDC4CDF071A7F584164C9F2DBF',
+                  u'memos': [],
+                  u'result': u'tesSUCCESS',
+                  u'type': u'received'}}
+	... .getBalance()
+[{u'counterparty': u'',
+  u'currency': u'SWT',
+  u'freezed': u'20',
+  u'value': u'100'}]
+fingate_setserver_v2 激活 wallet_setserver_v2 成功
+钱包信息
+	... .isActivated()  = True
+	... .getSecret()    = shanD8GLevAWqcdHHTUHq3eoHoYoc
+	... .getAddress()   = jE7wKaMvuxjoBcDJCHr141VktUDLjJFhJY
+	... .getWallet()    = jE7wKaMvuxjoBcDJCHr141VktUDLjJFhJY shanD8GLevAWqcdHHTUHq3eoHoYoc
+
+******转账操作*********
+
+	现在用fingate_v2作一些账户操作
+	... wallet_setserver_v2.submitPayment() 同步转给 wallet_setserver_v1 25个井通
+{u'client_resource_id': u'WC1462254388062',
+ u'date': 1462254400,
+ u'fee': u'0.000012',
+ u'hash': u'B46BA1FAD1FBF79896A5B8A55982A9F99E350CA216214B8B3858617793771E1F',
+ u'result': u'tesSUCCESS',
+ u'state': u'validated',
+ u'success': True}
+	... wallet_ulimit.submitPayment() 同步转给 wallet_setserver_v1 1000个井通
+{u'client_resource_id': u'WC1462254399121',
+ u'date': 1462254410,
+ u'fee': u'0.000012',
+ u'hash': u'2CE69A298C520A66045319E6EAD35F680F1A6C18463A7061D05091696391C841',
+ u'result': u'tesSUCCESS',
+ u'state': u'validated',
+ u'success': True}
+	... wallet_ulimit.submitPayment() 同步转给 wallet_setserver_v1 75 美元
+{}
+		 wallet_setserver_v1 钱包状态 和 盈余
+		 .isActivated() = False before .getBalance()
+[{u'counterparty': u'',
+  u'currency': u'SWT',
+  u'freezed': u'25',
+  u'value': u'1025'},
+ {u'counterparty': u'jBciDE8Q3uJjf111VeiUNM775AMKHEbBLS',
+  u'currency': u'USD',
+  u'freezed': u'0',
+  u'value': u'75'}]
+		 .isActivated() = True after .getBalance()

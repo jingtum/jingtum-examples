@@ -1,0 +1,19 @@
+jingtumsdk V0.2.20.dev0	2016/04/29
+
+General:  应该增加python3的支持, ubuntu16.04默认已经是python3了， python2默认不安装
+
+
+FinGate
+	.setTest()			没有实现
+	.getServerInfo()	没有属性 ['api']
+	.setTTongServer()	没有该方法调用
+	.activeWallet()		v1 api 不能激活
+	.getNextUUID()		可能分辨率不够，不足于支持并发
+
+Wallet
+	.isActive()			依赖 .getBalance() 或者其他调用
+	.submitPayment()	有时候打印timeout的调试信息，但实际交易成功(
+							2016-05-03 01:54:25,025 - root - ERROR - payment:('The read operation timed out',)
+							2016-05-03 01:54:25,025 - root - DEBUG - payment------------------:{}i
+							)
+
